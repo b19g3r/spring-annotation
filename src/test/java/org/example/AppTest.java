@@ -171,4 +171,28 @@ public class AppTest {
             System.out.println(name);
         }
     }
+
+    @Test
+    public void testFactoryBean() {
+        AnnotationConfigApplicationContext applicationContext =
+                new AnnotationConfigApplicationContext(MainConfig6.class);
+        String[] definitionNames = applicationContext.getBeanDefinitionNames();
+        for (String name : definitionNames) {
+            System.out.println(name);
+        }
+
+        //
+        Object colorFactoryBean = applicationContext.getBean("colorFactoryBean");
+        System.out.println(colorFactoryBean.getClass());
+
+        // 工厂bean获取的是调用getObject方法创建的对象
+        Object bean2 = applicationContext.getBean("colorFactoryBean");
+        Object bean3 = applicationContext.getBean("colorFactoryBean");
+        System.out.println("bean的类型：" + bean2.getClass());
+        System.out.println(bean2 == bean3);
+
+        Object bean4 = applicationContext.getBean("&colorFactoryBean");
+        System.out.println(bean4.getClass());
+
+    }
 }
