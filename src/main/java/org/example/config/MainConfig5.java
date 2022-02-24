@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
  * {@code @Import} 快速地导入组件，id默认是组件的全类名
  */
 @Configuration
-@Import({Color.class, MyImportSelector.class})
+@Import({Color.class, MyImportSelector.class, MyImportBeanDefinitionRegistrar.class})
 public class MainConfig5 {
 
     @Bean
