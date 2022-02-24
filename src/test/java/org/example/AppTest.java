@@ -3,6 +3,7 @@ package org.example;
 import org.example.bean.Person;
 import org.example.config.MainConfig;
 import org.example.config.MainConfig2;
+import org.example.config.MainConfig3;
 import org.example.config.ThreadScope;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -112,4 +113,31 @@ public class AppTest {
 
     }
 
+    @Test
+    public void testLazy() {
+        AnnotationConfigApplicationContext applicationContext =
+                new AnnotationConfigApplicationContext(MainConfig3.class);
+        System.out.println("IOC容器创建完成");
+
+        final Object lazyPerson = applicationContext.getBean("lazyPerson");
+        final Object lazyPerson2 = applicationContext.getBean("lazyPerson");
+        System.out.println(lazyPerson);
+        System.out.println(lazyPerson == lazyPerson2);
+
+        final Object person = applicationContext.getBean("person");
+        final Object person2 = applicationContext.getBean("person");
+
+        System.out.println(person);
+        System.out.println(person == person2);
+    }
+
+    @Test
+    public void testLazy2() {
+        AnnotationConfigApplicationContext applicationContext =
+                new AnnotationConfigApplicationContext(MainConfig3.class);
+        System.out.println("IOC容器创建完成");
+        // final BookService bookService = (BookService) applicationContext.getBean("bookService");
+        // bookService.serviceMethod();
+
+    }
 }

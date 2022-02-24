@@ -27,7 +27,7 @@ public class MainConfig2 {
      * 生成两个 bean beanName : scopedTarget.pet -----> beanType：org.example.bean.Pet beanName : pet ----->
      * beanType：com.sun.proxy.$Proxy14
      */
-    // @Bean
+    @Bean
     @Scope(proxyMode = ScopedProxyMode.INTERFACES)
     public Pet pet() {
         return new Pet("pet", 2);
@@ -37,7 +37,7 @@ public class MainConfig2 {
      * 生成两个 bean beanName : scopedTarget.car -----> beanType：org.example.bean.Car beanName : car ----->
      * beanType：org.example.bean.Car$$EnhancerBySpringCGLIB$$445abdf8
      */
-    // @Bean
+    @Bean
     @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
     public Car car() {
         return new Car("car", 2);
