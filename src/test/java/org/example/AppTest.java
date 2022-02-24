@@ -1,11 +1,7 @@
 package org.example;
 
 import org.example.bean.Person;
-import org.example.config.MainConfig;
-import org.example.config.MainConfig2;
-import org.example.config.MainConfig3;
-import org.example.config.MainConfig4;
-import org.example.config.ThreadScope;
+import org.example.config.*;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -166,4 +162,13 @@ public class AppTest {
 
     }
 
+    @Test
+    public void testImport() {
+        AnnotationConfigApplicationContext applicationContext =
+                new AnnotationConfigApplicationContext(MainConfig5.class);
+        String[] definitionNames = applicationContext.getBeanDefinitionNames();
+        for (String name : definitionNames) {
+            System.out.println(name);
+        }
+    }
 }
