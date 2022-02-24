@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class MainConfigOfLifeCycle {
 
     // @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    @Bean(initMethod = "init", destroyMethod = "destroy")
+    @Bean(initMethod = "init", destroyMethod = "destroyMethod")
     public Car car() {
         return new Car();
     }

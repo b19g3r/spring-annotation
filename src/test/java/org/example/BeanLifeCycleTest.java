@@ -20,6 +20,17 @@ public class BeanLifeCycleTest {
      * 对于单实例bean来说，在容器关闭的时候，会调用bean的销毁方法；
      * <p>
      * 对于多实例bean来说，Spring容器不会管理这个bean，也就不会自动调用这个bean的销毁方法了。不过，小伙伴们可以手动调用多实例bean的销毁方法。
+     * <p>
+     * Spring为bean提供了两种初始化的方式，第一种方式是实现InitializingBean接口（也就是要实现该接口中的afterPropertiesSet方法），第二种方式是在配置文件或@Bean注解中通过
+     * initMethod来指定，这两种方式可以同时使用，同时使用先调用afterPropertiesSet方法，后执行initMethod指定的方法。 如果两种配置指定的是同一方法则只会执行一次
+     * <p>
+     * 实现InitializingBean接口是直接调用afterPropertiesSet()方法，与通过反射调用init-method指定的方法相比，效率相对来说要高点。但是init-method方式消除了对Spring的依赖
+     * <p>
+     * 实现org.springframework.beans.factory.DisposableBean接口的bean在销毁前，Spring将会调用DisposableBean接口的destroy()方法
+     * <p>
+     * 先调用 destroy() 再 调用 destroyMethod
+     * <p>
+     * destroy() 和 destroyMethod 都可以在销毁 bean 时做一些收尾工作。前者与Spring耦合高，使用类型强转.方法名()，效率高；后者耦合低，使用反射，效率相对来说较低
      */
     @Test
     public void test01() {
