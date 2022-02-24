@@ -4,11 +4,13 @@ import org.example.bean.Person;
 import org.example.config.MainConfig;
 import org.example.config.MainConfig2;
 import org.example.config.MainConfig3;
+import org.example.config.MainConfig4;
 import org.example.config.ThreadScope;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -31,7 +33,7 @@ public class AppTest {
     /**
      * {@code @bean} 测试
      */
-    @Test()
+    @Test
     public void beanTest() {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(MainConfig.class);
         final Map<String, Person> beansOfType = applicationContext.getBeansOfType(Person.class);
@@ -140,4 +142,28 @@ public class AppTest {
         // bookService.serviceMethod();
 
     }
+
+    @Test
+    public void testCondition() {
+        AnnotationConfigApplicationContext applicationContext =
+                new AnnotationConfigApplicationContext(MainConfig4.class);
+        // 我们现在就来看一下IOC容器中Person这种类型的bean都有哪些
+        String[] namesForType = applicationContext.getBeanNamesForType(Person.class);
+
+        // 拿到IOC运行环境
+        ConfigurableEnvironment environment = applicationContext.getEnvironment();
+        // 动态获取坏境变量的值，例如操作系统的名字
+        // 获取操作系统的名字，例如Windows 10
+        String property = environment.getProperty("os.name");
+        System.out.println(property);
+
+        for (String name : namesForType) {
+            System.out.println(name);
+        }
+
+        Map<String, Person> persons = applicationContext.getBeansOfType(Person.class); // 找到这个Person类型的所有bean
+        System.out.println(persons);
+
+    }
+
 }
