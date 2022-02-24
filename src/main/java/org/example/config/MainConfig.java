@@ -33,6 +33,7 @@ public class MainConfig {
      * {@code @bean} 可以使用 name 指定的值作为 bean 的id
      */
     @Bean("namedPerson")
+    @Scope
     public Person person() {
         return new Person("named", 18);
     }
