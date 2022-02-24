@@ -37,4 +37,14 @@ public class AppTest {
             System.out.println(name);
         }
     }
+
+    @Test
+    public void iocTest() {
+        final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(MainConfig.class);
+        // 我们现在就来看一下IOC容器中有哪些bean，即容器中所有bean定义的名字
+        String[] definitionNames = applicationContext.getBeanDefinitionNames();
+        for (String name : definitionNames) {
+            System.out.println(name);
+        }
+    }
 }
