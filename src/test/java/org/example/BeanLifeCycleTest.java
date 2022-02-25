@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.bean.Car;
 import org.example.config2.MainConfigOfLifeCycle;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -57,5 +58,40 @@ public class BeanLifeCycleTest {
         // 容器创建完成
         // car constructor...
         // car ... init...
+    }
+
+    /**
+     * 初始化 Initialization
+     * <p>
+     * constructor -> BeanPostProcessor.postProcessBeforeInitialization -> @PostConstructor ->
+     * InitializingBean.afterPropertiesSet -> initMethod -> BeanPostProcessor.postProcessAfterInitialization =>
+     * (constructed, inuse)
+     */
+    @Test
+    public void test02() {
+        // 1. 创建IOC容器
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(MainConfigOfLifeCycle.class);
+        System.out.println("容器创建完成");
+
+        final Car car = (Car) applicationContext.getBean("car");
+
+        final String name = car.getName();
+
+        applicationContext.registerShutdownHook();
+
+        //// test result:
+        // MyBeanPostProcessor.postProcessBeforeInitialization.. mainConfigOfLifeCycle org.example.config2.MainConfigOfLifeCycle$$EnhancerBySpringCGLIB$$1208e45e@65f8f5ae
+        // MyBeanPostProcessor.postProcessAfterInitialization.. mainConfigOfLifeCycle org.example.config2.MainConfigOfLifeCycle$$EnhancerBySpringCGLIB$$1208e45e@65f8f5ae
+        // car constructor...
+        // MyBeanPostProcessor.postProcessBeforeInitialization.. car Person [name=null, age=null]
+        // car @PostConstruct
+        // car: InitializingBean.afterPropertiesSet..
+        // car ... init...
+        // MyBeanPostProcessor.postProcessAfterInitialization.. car Person [name=null, age=null]
+        // 容器创建完成
+        // car @PreDestroy
+        // car ... DisposableBean.destroy...
+        // car ... destroyMethod...
+
     }
 }
