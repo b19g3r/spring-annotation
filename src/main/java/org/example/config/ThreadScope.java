@@ -9,6 +9,7 @@ import java.util.Objects;
 
 /**
  * 自定义本地线程级别的bean作用域，不同的线程中的bean是不同的实例，同一个线程中同名的bean是同一个实例
+ * @see org.springframework.context.support.SimpleThreadScope
  */
 public class ThreadScope implements Scope {
 

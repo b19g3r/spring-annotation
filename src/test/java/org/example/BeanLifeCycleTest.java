@@ -1,11 +1,15 @@
 package org.example;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.example.bean.Car;
 import org.example.config2.MainConfigOfLifeCycle;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class BeanLifeCycleTest {
+
+    private final Log log = LogFactory.getLog(getClass());
 
     /**
      * 在Spring容器创建完成时，会自动调用单实例bean的构造方法，对单实例bean进行了实例化操作
