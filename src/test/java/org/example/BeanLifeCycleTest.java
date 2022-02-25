@@ -31,6 +31,10 @@ public class BeanLifeCycleTest {
      * 先调用 destroy() 再 调用 destroyMethod
      * <p>
      * destroy() 和 destroyMethod 都可以在销毁 bean 时做一些收尾工作。前者与Spring耦合高，使用类型强转.方法名()，效率高；后者耦合低，使用反射，效率相对来说较低
+     * <p>
+     * 初始化:: construct -> @PostConstruct -> InitializingBean.afterPropertiesSet -> initMethod => (inuse)
+     * <p>
+     * 销毁::   preDestroy -> DisposableBean.destroy -> destroyMethod => (freed)
      */
     @Test
     public void test01() {
