@@ -26,7 +26,7 @@
 
 ### doCreateBean
 
-- 真正创建 bena 的地方: org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean
+- 真正创建 bena 的地方: `org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean`
 
 ```java
 // https://juejin.cn/post/6844904065457979405
@@ -100,7 +100,46 @@ protected Object initializeBean(final String beanName, final Object bean, @Nulla
 
 ```
 
-### invokInitMethods
+### invokeInitMethods
+
+```java
+protected void invokeInitMethods(String beanName, Object bean, @Nullable RootBeanDefinition mbd)
+			throws Throwable {
+
+    boolean isInitializingBean = (bean instanceof InitializingBean);
+    if (isInitializingBean && (mbd == null || !mbd.isExternallyManagedInitMethod("afterPropertiesSet"))) {
+        
+        if (System.getSecurityManager() != null) {
+            try {
+                AccessController.doPrivileged((PrivilegedExceptionAction<Object>) () -> {
+                    ((InitializingBean) bean).afterPropertiesSet();
+                    return null;
+                }, getAccessControlContext());
+            }
+            catch (PrivilegedActionException pae) {
+                throw pae.getException();
+            }
+        }
+        else {
+            ((InitializingBean) bean).afterPropertiesSet();
+        }
+    }
+
+    if (mbd != null && bean.getClass() != NullBean.class) {
+        String initMethodName = mbd.getInitMethodName();
+        if (StringUtils.hasLength(initMethodName) &&
+                !(isInitializingBean && "afterPropertiesSet".equals(initMethodName)) &&
+                !mbd.isExternallyManagedInitMethod(initMethodName)) {
+            invokeCustomInitMethod(beanName, bean, mbd);
+        }
+    }
+}
+```
+
+### registerDisposableBeanIfNecessary
+
+`registerDisposableBeanIfNecessary -> registerDisposableBean`  
+`destroySingleton -> destroyBean -> bean.destroy();`
 
 ```java
 // DisposableBeanAdapter.java
@@ -151,7 +190,8 @@ protected Object initializeBean(String beanName, Object bean, @Nullable RootBean
     // 第二次
     wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 
-    // ...
+    invokeInitMethods(beanName, wrappedBean, mbd);
+
     return wrappedBean;
 }
 ```
@@ -272,3 +312,9 @@ org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.app
 
 // 之后循环依赖检查 afterPropertiesSet 
 ```
+
+## 参考
+
+> https://juejin.cn/post/6966158157202587662
+> https://segmentfault.com/a/1190000040365130
+> https://segmentfault.com/a/1190000020747302
